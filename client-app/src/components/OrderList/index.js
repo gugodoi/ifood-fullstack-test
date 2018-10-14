@@ -3,7 +3,7 @@ import OrderDetails from '../OrderDetails';
 import LoadingComponent from '../utils/Loading';
 import Date from '../utils/Date';
 import Currency from '../utils/Currency';
-import { TableWrapper, Table, Tr, Th, Td } from '../utils/Table/index.style';
+import { Table, Thead, Tr, Th, Td } from '../utils/Table/index.style';
 
 class OrderList extends PureComponent {
   state = {
@@ -37,9 +37,9 @@ class OrderList extends PureComponent {
         {openModal && (
           <OrderDetails handleClose={this.closeDetails} listDetails={details} />
         )}
-        <TableWrapper>
+        <div>
           <Table>
-            <thead>
+            <Thead>
               <Tr>
                 <Th>Date</Th>
                 <Th>Client Name</Th>
@@ -47,18 +47,18 @@ class OrderList extends PureComponent {
                 <Th>E-mail</Th>
                 <Th>Total value</Th>
               </Tr>
-            </thead>
+            </Thead>
             <tbody>
               {list.map(order => {
                 return (
                   <Tr key={order.id} onClick={() => this.openDetails(order.id)}>
-                    <Td>
+                    <Td data-label="Date">
                       <Date date={order.date} />
                     </Td>
-                    <Td>{order.client.name}</Td>
-                    <Td>{order.client.phone}</Td>
-                    <Td>{order.client.email}</Td>
-                    <Td>
+                    <Td data-label="Client Name">{order.client.name}</Td>
+                    <Td data-label="Phone">{order.client.phone}</Td>
+                    <Td data-label="E-mail">{order.client.email}</Td>
+                    <Td data-label="Total Value">
                       <Currency value={order.total} />
                     </Td>
                   </Tr>
@@ -66,7 +66,7 @@ class OrderList extends PureComponent {
               })}
             </tbody>
           </Table>
-        </TableWrapper>
+        </div>
       </div>
     );
   }

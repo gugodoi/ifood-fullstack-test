@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 import Modal from '@material-ui/core/Modal';
-import { Table, Th, Td } from '../utils/Table/index.style';
+import { Table, Thead, Th, Td } from '../utils/Table/index.style';
 import Currency from '../utils/Currency';
 
 const ModalBody = styled.div`
@@ -42,6 +42,12 @@ const TR = styled.tr`
   :nth-child(even) {
     background: #f8f8f8;
   }
+  @media screen and (max-width: 600px) {
+    background: #f8f8f8;
+    border-bottom: 3px solid #ddd;
+    display: block;
+    margin-bottom: 0.625em;
+  }
 `;
 
 class OrderDetails extends PureComponent {
@@ -70,23 +76,23 @@ class OrderDetails extends PureComponent {
             </Details>
             <div>
               <Table>
-                <thead>
+                <Thead>
                   <TR>
                     <Th>Description</Th>
                     <Th>Quantity</Th>
                     <Th>Unit Price</Th>
                     <Th>Total</Th>
                   </TR>
-                </thead>
+                </Thead>
                 <tbody>
                   {listDetails.details.map(detail => (
                     <TR key={detail.id}>
-                      <Td>{detail.description}</Td>
-                      <Td>{detail.quantity}</Td>
-                      <Td>
+                      <Td data-label="Description">{detail.description}</Td>
+                      <Td data-label="quantity">{detail.quantity}</Td>
+                      <Td data-label="Unit Price">
                         <Currency value={detail.unitPrice} />
                       </Td>
-                      <Td>
+                      <Td data-label="Total">
                         <Currency value={detail.quantity * detail.unitPrice} />
                       </Td>
                     </TR>
