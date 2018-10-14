@@ -37,8 +37,12 @@ class Filter extends PureComponent {
   };
 
   handleFieldChange = (input, event) => {
-    event.preventDefault();
-    this.setState({ [input]: event.target.value });
+    const value = event.target.value;
+    this.setState({ [input]: value });
+  };
+
+  handleDateChange = (input, value) => {
+    this.setState({ [input]: value });
   };
 
   search = () => {
@@ -55,7 +59,7 @@ class Filter extends PureComponent {
               label="Start Date"
               value={start}
               format="DD/MM/YYYY"
-              onChange={e => this.handleFieldChange('start', e)}
+              onChange={start => this.handleDateChange('start', start)}
             />
           </MuiPickersUtilsProvider>
           <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -63,7 +67,7 @@ class Filter extends PureComponent {
               label="End Date"
               format="DD/MM/YYYY"
               value={end}
-              onChange={e => this.handleFieldChange('end', e)}
+              onChange={end => this.handleDateChange('end', end)}
             />
           </MuiPickersUtilsProvider>
           <TextField

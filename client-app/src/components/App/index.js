@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import moment from 'moment';
 import Filter from '../Filter';
 import OrderList from '../OrderList';
 
@@ -33,7 +34,7 @@ class App extends Component {
     order: [
       {
         id: 1,
-        date: '2018-11-01',
+        date: moment().format('YYYY-MM-DD'),
         clientId: 1,
         total: 55.0,
         details: [
@@ -53,7 +54,7 @@ class App extends Component {
       },
       {
         id: 2,
-        date: '2018-11-01',
+        date: moment().format('YYYY-MM-DD'),
         clientId: 2,
         total: 43.0,
         details: [
@@ -73,7 +74,7 @@ class App extends Component {
       },
       {
         id: 3,
-        date: '2018-11-02',
+        date: moment().format('YYYY-MM-DD'),
         clientId: 3,
         total: 99.0,
         details: [
@@ -93,7 +94,7 @@ class App extends Component {
       },
       {
         id: 4,
-        date: '2018-11-02',
+        date: moment().format('YYYY-MM-DD'),
         clientId: 1,
         total: 15.0,
         details: [
@@ -113,7 +114,7 @@ class App extends Component {
       },
       {
         id: 5,
-        date: '2018-11-02',
+        date: moment().format('YYYY-MM-DD'),
         clientId: 1,
         total: 28.0,
         details: [
@@ -133,7 +134,7 @@ class App extends Component {
       },
       {
         id: 6,
-        date: '2018-11-04',
+        date: moment().format('YYYY-MM-DD'),
         clientId: 1,
         total: 5.0,
         details: [
@@ -183,10 +184,21 @@ class App extends Component {
     });
   };
 
+  filterByDate = (list, start, end) => {
+    const startFormat = moment(start).format();
+    const endFormat = moment(end).format();
+
+    return list.filter(obj => {
+      return moment(obj.date).isBetween(startFormat, endFormat, 'days', '[]');
+    });
+  };
+
   // TODO: move it to API gateway
   filterList = ({ start, end, name, phone, email }) => {
     let list = [...this.state.order];
     let clients = [...this.state.clients];
+
+    list = this.filterByDate(list, start, end);
 
     clients = this.filterByValue(clients, 'name', name);
     clients = this.filterByValue(clients, 'phone', phone);
