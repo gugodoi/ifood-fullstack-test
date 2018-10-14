@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+export const TableWrapper = styled.div`
+  overflow-x: auto;
+`;
+
 export const Table = styled.table`
   width: 100%;
   line-height: 2.25;
@@ -7,7 +11,6 @@ export const Table = styled.table`
   font-size: 0.85rem;
   border: 1px solid #ccc;
   border-collapse: collapse;
-  table-layout: fixed;
 `;
 export const Tr = styled.tr`
   border: 1px solid #ddd;
