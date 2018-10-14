@@ -36,6 +36,16 @@ class Filter extends PureComponent {
     name: '',
   };
 
+  componentDidMount() {
+    window.addEventListener('keyup', event => {
+      event.preventDefault();
+      if (event.keyCode === 13) {
+        // execute search function on 'Enter' key press
+        this.search();
+      }
+    });
+  }
+
   handleFieldChange = (input, event) => {
     const value = event.target.value;
     this.setState({ [input]: value });
