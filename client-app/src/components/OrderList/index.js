@@ -28,7 +28,7 @@ class OrderList extends PureComponent {
       return <LoadingComponent />;
     }
 
-    if (!list.length) {
+    if (!list || !list.length) {
       return <div />;
     }
 
