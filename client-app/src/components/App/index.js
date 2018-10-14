@@ -36,43 +36,163 @@ class App extends Component {
         date: '2018-11-01',
         clientId: 1,
         total: 55.0,
+        details: [
+          {
+            id: 1,
+            description: 'Item A',
+            quantity: 1,
+            unitPrice: 5.0,
+          },
+          {
+            id: 2,
+            description: 'Item B',
+            quantity: 5,
+            unitPrice: 10.0,
+          },
+        ],
       },
       {
         id: 2,
         date: '2018-11-01',
         clientId: 2,
         total: 43.0,
+        details: [
+          {
+            id: 1,
+            description: 'Item A',
+            quantity: 1,
+            unitPrice: 5.0,
+          },
+          {
+            id: 2,
+            description: 'Item B',
+            quantity: 5,
+            unitPrice: 10.0,
+          },
+        ],
       },
       {
         id: 3,
         date: '2018-11-02',
         clientId: 3,
         total: 99.0,
+        details: [
+          {
+            id: 1,
+            description: 'Item A',
+            quantity: 1,
+            unitPrice: 5.0,
+          },
+          {
+            id: 2,
+            description: 'Item B',
+            quantity: 5,
+            unitPrice: 10.0,
+          },
+        ],
       },
       {
         id: 4,
         date: '2018-11-02',
         clientId: 1,
         total: 15.0,
+        details: [
+          {
+            id: 1,
+            description: 'Item A',
+            quantity: 1,
+            unitPrice: 5.0,
+          },
+          {
+            id: 2,
+            description: 'Item B',
+            quantity: 5,
+            unitPrice: 10.0,
+          },
+        ],
       },
       {
         id: 5,
         date: '2018-11-02',
         clientId: 1,
         total: 28.0,
+        details: [
+          {
+            id: 1,
+            description: 'Item A',
+            quantity: 1,
+            unitPrice: 5.0,
+          },
+          {
+            id: 2,
+            description: 'Item B',
+            quantity: 5,
+            unitPrice: 10.0,
+          },
+        ],
       },
       {
         id: 6,
         date: '2018-11-04',
         clientId: 1,
         total: 5.0,
+        details: [
+          {
+            id: 1,
+            description: 'Item A',
+            quantity: 1,
+            unitPrice: 5.0,
+          },
+          {
+            id: 2,
+            description: 'Item B',
+            quantity: 5,
+            unitPrice: 10.0,
+          },
+        ],
       },
     ],
     filteredList: [],
   };
 
+  // TODO: move it to API gateway
+  filterByValue = (array, key, value) => {
+    if (!value) {
+      return array;
+    }
+    return array.filter(obj =>
+      obj[key].toLowerCase().includes(value.toLowerCase())
+    );
+  };
+
+  // TODO: move it to API gateway
+  filterListByClient = (list, clients) => {
+    const clientsArray = {};
+    let clientIds = [];
+    clients.forEach(client => {
+      clientsArray[client.id] = client;
+      clientIds.push(client.id);
+    });
+
+    return list.filter(obj => {
+      if (clientIds.includes(obj.clientId)) {
+        obj.client = clientsArray[obj.clientId];
+        return obj;
+      }
+      return false;
+    });
+  };
+
+  // TODO: move it to API gateway
   filterList = ({ start, end, name, phone, email }) => {
-    const list = [...this.state.order];
+    let list = [...this.state.order];
+    let clients = [...this.state.clients];
+
+    clients = this.filterByValue(clients, 'name', name);
+    clients = this.filterByValue(clients, 'phone', phone);
+    clients = this.filterByValue(clients, 'email', email);
+
+    list = this.filterListByClient(list, clients);
     this.setState({ filteredList: list });
   };
 

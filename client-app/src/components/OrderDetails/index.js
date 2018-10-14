@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
 import styled from 'styled-components';
 import Modal from '@material-ui/core/Modal';
-import { Table, Tr, Th, Td } from '../utils/Table/index.style';
+import { Table, Th, Td } from '../utils/Table/index.style';
+import Currency from '../utils/Currency';
 
 const ModalBody = styled.div`
   top: 50%;
@@ -20,6 +21,10 @@ const Header = styled.header`
   font-weight: bold;
   text-align: center;
   margin-bottom: 15px;
+`;
+
+const Fields = styled.span`
+  font-weight: bold;
 `;
 
 const Details = styled.div`
@@ -41,7 +46,7 @@ const TR = styled.tr`
 
 class OrderDetails extends PureComponent {
   render() {
-    const { handleClose } = this.props;
+    const { handleClose, listDetails } = this.props;
     return (
       <div>
         <Modal
@@ -53,9 +58,15 @@ class OrderDetails extends PureComponent {
           <ModalBody>
             <Header>Order Details</Header>
             <Details>
-              <div>Client Name: John Doe</div>
-              <div>Phone: 1234-5678</div>
-              <div>E-mail: john@doe.com</div>
+              <div>
+                Client Name: <Fields>{listDetails.client.name}</Fields>
+              </div>
+              <div>
+                Phone: <Fields>{listDetails.client.phone}</Fields>
+              </div>
+              <div>
+                E-mail: <Fields>{listDetails.client.email}</Fields>
+              </div>
             </Details>
             <div>
               <Table>
@@ -68,18 +79,18 @@ class OrderDetails extends PureComponent {
                   </TR>
                 </thead>
                 <tbody>
-                  <TR>
-                    <Td>Item A</Td>
-                    <Td>1</Td>
-                    <Td>5.00</Td>
-                    <Td>5.00</Td>
-                  </TR>
-                  <TR>
-                    <Td>Item B</Td>
-                    <Td>5</Td>
-                    <Td>10.00</Td>
-                    <Td>50.00</Td>
-                  </TR>
+                  {listDetails.details.map(detail => (
+                    <TR key={detail.id}>
+                      <Td>{detail.description}</Td>
+                      <Td>{detail.quantity}</Td>
+                      <Td>
+                        <Currency value={detail.unitPrice} />
+                      </Td>
+                      <Td>
+                        <Currency value={detail.quantity * detail.unitPrice} />
+                      </Td>
+                    </TR>
+                  ))}
                 </tbody>
               </Table>
             </div>

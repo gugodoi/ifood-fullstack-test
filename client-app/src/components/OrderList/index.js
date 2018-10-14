@@ -8,10 +8,12 @@ import { Table, Tr, Th, Td } from '../utils/Table/index.style';
 class OrderList extends PureComponent {
   state = {
     openModal: false,
+    details: {},
   };
 
   openDetails = orderId => {
-    this.setState({ openModal: true });
+    const listDetails = this.props.list.filter(obj => obj.id === orderId)[0];
+    this.setState({ openModal: true, details: listDetails });
   };
 
   closeDetails = () => {
@@ -19,7 +21,7 @@ class OrderList extends PureComponent {
   };
 
   render() {
-    const { openModal } = this.state;
+    const { openModal, details } = this.state;
     const { loading, list } = this.props;
 
     if (loading) {
@@ -32,7 +34,9 @@ class OrderList extends PureComponent {
 
     return (
       <div>
-        {openModal && <OrderDetails handleClose={this.closeDetails} />}
+        {openModal && (
+          <OrderDetails handleClose={this.closeDetails} listDetails={details} />
+        )}
         <Table>
           <thead>
             <Tr>
@@ -50,9 +54,9 @@ class OrderList extends PureComponent {
                   <Td>
                     <Date date={order.date} />
                   </Td>
-                  <Td>{order.name}</Td>
-                  <Td>{order.phone}</Td>
-                  <Td>{order.email}</Td>
+                  <Td>{order.client.name}</Td>
+                  <Td>{order.client.phone}</Td>
+                  <Td>{order.client.email}</Td>
                   <Td>
                     <Currency value={order.total} />
                   </Td>
