@@ -1,5 +1,7 @@
 Ifood fullstack test: https://github.com/ifood/ifood-fullstack-test
 
+Demo: http://ifood-orderlist.surge.sh/
+
 This project is a one page webapp created using [Create React App](https://github.com/facebook/create-react-app), React, Styled Components, Material UI and more.
 
 ## Available Scripts
