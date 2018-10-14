@@ -29,37 +29,41 @@ const FilterButton = styled.div`
 
 class Filter extends PureComponent {
   state = {
-    startDate: new Date(),
-    endDate: new Date(),
+    start: new Date(),
+    end: new Date(),
+    email: '',
+    phone: '',
+    name: '',
   };
 
-  handleStartDateChange = date => {
-    this.setState({ startDate: date });
+  handleFieldChange = (input, event) => {
+    event.preventDefault();
+    this.setState({ [input]: event.target.value });
   };
 
-  handleEndDateChange = date => {
-    this.setState({ endDate: date });
+  search = () => {
+    this.props.callback(this.state);
   };
 
   render() {
-    const { startDate, endDate } = this.state;
+    const { start, end } = this.state;
     return (
       <FilterWrapper>
         <FilterFields>
           <MuiPickersUtilsProvider utils={MomentUtils}>
             <InlineDatePicker
               label="Start Date"
-              value={startDate}
+              value={start}
               format="DD/MM/YYYY"
-              onChange={this.handleStartDateChange}
+              onChange={e => this.handleFieldChange('start', e)}
             />
           </MuiPickersUtilsProvider>
           <MuiPickersUtilsProvider utils={MomentUtils}>
             <InlineDatePicker
               label="End Date"
               format="DD/MM/YYYY"
-              value={endDate}
-              onChange={this.handleEndDateChange}
+              value={end}
+              onChange={e => this.handleFieldChange('end', e)}
             />
           </MuiPickersUtilsProvider>
           <TextField
@@ -68,6 +72,7 @@ class Filter extends PureComponent {
             InputLabelProps={{
               shrink: true,
             }}
+            onChange={e => this.handleFieldChange('name', e)}
           />
           <TextField
             id="phone"
@@ -75,6 +80,7 @@ class Filter extends PureComponent {
             InputLabelProps={{
               shrink: true,
             }}
+            onChange={e => this.handleFieldChange('phone', e)}
           />
           <TextField
             id="email"
@@ -82,10 +88,14 @@ class Filter extends PureComponent {
             InputLabelProps={{
               shrink: true,
             }}
+            type="email"
+            onChange={e => this.handleFieldChange('email', e)}
           />
         </FilterFields>
         <FilterButton>
-          <Button variant="contained">Search</Button>
+          <Button variant="contained" onClick={this.search}>
+            Search
+          </Button>
         </FilterButton>
       </FilterWrapper>
     );

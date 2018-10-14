@@ -1,49 +1,38 @@
 import React, { PureComponent } from 'react';
-import styled from 'styled-components';
+import OrderDetails from '../OrderDetails';
 import LoadingComponent from '../utils/Loading';
-
-const Table = styled.table`
-  width: 100%;
-  line-height: 2.25;
-  text-align: center;
-  font-size: 0.85rem;
-  border: 1px solid #ccc;
-  border-collapse: collapse;
-  table-layout: fixed;
-`;
-const Tr = styled.tr`
-  border: 1px solid #ddd;
-  padding: 0.35em;
-  :nth-child(even) {
-    background: #f8f8f8;
-  }
-`;
-const Th = styled.th`
-  padding: 0.625em;
-  background: #999;
-  color: #fff;
-  font-size: 0.85em;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-`;
-
-const Td = styled.td`
-  padding: 0.625em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
+import Date from '../utils/Date';
+import Currency from '../utils/Currency';
+import { Table, Tr, Th, Td } from '../utils/Table/index.style';
 
 class OrderList extends PureComponent {
+  state = {
+    openModal: false,
+  };
+
+  openDetails = orderId => {
+    this.setState({ openModal: true });
+  };
+
+  closeDetails = () => {
+    this.setState({ openModal: false });
+  };
+
   render() {
-    const { loading } = this.props;
+    const { openModal } = this.state;
+    const { loading, list } = this.props;
 
     if (loading) {
       return <LoadingComponent />;
     }
 
+    if (!list.length) {
+      return <div />;
+    }
+
     return (
       <div>
+        {openModal && <OrderDetails handleClose={this.closeDetails} />}
         <Table>
           <thead>
             <Tr>
@@ -55,41 +44,21 @@ class OrderList extends PureComponent {
             </Tr>
           </thead>
           <tbody>
-            <Tr>
-              <Td>10/10/2018</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-            </Tr>
-            <Tr>
-              <Td>10/10/2018</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-            </Tr>
-            <Tr>
-              <Td>10/10/2018</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-            </Tr>
-            <Tr>
-              <Td>10/10/2018</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-            </Tr>
-            <Tr>
-              <Td>10/10/2018</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-              <Td>asdfasdfasdfadsf</Td>
-            </Tr>
+            {list.map(order => {
+              return (
+                <Tr key={order.id} onClick={() => this.openDetails(order.id)}>
+                  <Td>
+                    <Date date={order.date} />
+                  </Td>
+                  <Td>{order.name}</Td>
+                  <Td>{order.phone}</Td>
+                  <Td>{order.email}</Td>
+                  <Td>
+                    <Currency value={order.total} />
+                  </Td>
+                </Tr>
+              );
+            })}
           </tbody>
         </Table>
       </div>
