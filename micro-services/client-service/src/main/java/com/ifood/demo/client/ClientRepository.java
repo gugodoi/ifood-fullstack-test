@@ -12,10 +12,14 @@ public interface ClientRepository extends CrudRepository<Client, UUID> {
 
 	@RestResource(path = "byName")
 	Collection<Client> findByNameIgnoreCaseContaining(@Param("name") String name);
-	
+
 	@RestResource(path = "byPhone")
 	Collection<Client> findByPhoneIgnoreCaseContaining(@Param("phone") String phone);
-	
+
 	@RestResource(path = "byEmail")
 	Collection<Client> findByEmailIgnoreCaseContaining(@Param("email") String email);
+
+	@RestResource(path = "byNamePhoneEmail")
+	Collection<Client> findByNameIgnoreCaseContainingAndPhoneIgnoreCaseContainingAndEmailIgnoreCaseContaining(@Param("name") String name, @Param("phone") String phone, @Param("email") String email);
+
 }
