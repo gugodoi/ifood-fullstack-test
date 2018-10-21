@@ -9,11 +9,13 @@ class OrderList extends PureComponent {
   state = {
     openModal: false,
     details: {},
+    client: {},
   };
 
-  openDetails = orderId => {
-    const listDetails = this.props.list.filter(obj => obj.id === orderId)[0];
-    this.setState({ openModal: true, details: listDetails });
+  openDetails = orderIndex => {
+    const order = Object.assign({}, this.props.orders[orderIndex]);
+    const client = Object.assign({}, this.props.clients[order.clientId]);
+    this.setState({ openModal: true, details: order, client });
   };
 
   closeDetails = () => {
@@ -21,21 +23,25 @@ class OrderList extends PureComponent {
   };
 
   render() {
-    const { openModal, details } = this.state;
-    const { loading, list } = this.props;
+    const { openModal, details, client } = this.state;
+    const { loading, orders, clients } = this.props;
 
     if (loading) {
       return <LoadingComponent />;
     }
 
-    if (!list || !list.length) {
+    if (!orders || !orders.length) {
       return <div />;
     }
 
     return (
       <div>
         {openModal && (
-          <OrderDetails handleClose={this.closeDetails} listDetails={details} />
+          <OrderDetails
+            handleClose={this.closeDetails}
+            orderDetails={details}
+            client={client}
+          />
         )}
         <div>
           <Table>
@@ -49,17 +55,23 @@ class OrderList extends PureComponent {
               </Tr>
             </Thead>
             <tbody>
-              {list.map(order => {
+              {orders.map((order, index) => {
+                const client = clients.find(
+                  client => client.id === order.clientId
+                );
+                const total = order.items.reduce((acc, item) => {
+                  return acc + item.quantity * item.price;
+                }, 0);
                 return (
-                  <Tr key={order.id} onClick={() => this.openDetails(order.id)}>
+                  <Tr key={index} onClick={() => this.openDetails(index)}>
                     <Td data-label="Date">
-                      <Date date={order.date} />
+                      <Date date={order.confirmedAt} />
                     </Td>
-                    <Td data-label="Client Name">{order.client.name}</Td>
-                    <Td data-label="Phone">{order.client.phone}</Td>
-                    <Td data-label="E-mail">{order.client.email}</Td>
+                    <Td data-label="Client Name">{client.name}</Td>
+                    <Td data-label="Phone">{client.phone}</Td>
+                    <Td data-label="E-mail">{client.email}</Td>
                     <Td data-label="Total Value">
-                      <Currency value={order.total} />
+                      <Currency value={total} />
                     </Td>
                   </Tr>
                 );

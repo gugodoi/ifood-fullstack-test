@@ -52,7 +52,7 @@ const TR = styled.tr`
 
 class OrderDetails extends PureComponent {
   render() {
-    const { handleClose, listDetails } = this.props;
+    const { handleClose, orderDetails, client } = this.props;
     return (
       <div>
         <Modal
@@ -65,13 +65,13 @@ class OrderDetails extends PureComponent {
             <Header>Order Details</Header>
             <Details>
               <div>
-                Client Name: <Fields>{listDetails.client.name}</Fields>
+                Client Name: <Fields>{client.name}</Fields>
               </div>
               <div>
-                Phone: <Fields>{listDetails.client.phone}</Fields>
+                Phone: <Fields>{client.phone}</Fields>
               </div>
               <div>
-                E-mail: <Fields>{listDetails.client.email}</Fields>
+                E-mail: <Fields>{client.email}</Fields>
               </div>
             </Details>
             <div>
@@ -85,15 +85,15 @@ class OrderDetails extends PureComponent {
                   </TR>
                 </Thead>
                 <tbody>
-                  {listDetails.details.map(detail => (
-                    <TR key={detail.id}>
+                  {orderDetails.items.map((detail, index) => (
+                    <TR key={index}>
                       <Td data-label="Description">{detail.description}</Td>
                       <Td data-label="quantity">{detail.quantity}</Td>
                       <Td data-label="Unit Price">
-                        <Currency value={detail.unitPrice} />
+                        <Currency value={detail.price} />
                       </Td>
                       <Td data-label="Total">
-                        <Currency value={detail.quantity * detail.unitPrice} />
+                        <Currency value={detail.quantity * detail.price} />
                       </Td>
                     </TR>
                   ))}
